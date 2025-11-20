@@ -3,7 +3,6 @@
 Simulador interactivo de un sistema de control de inyección electrónica de combustible con realimentación de sensor de oxígeno (sonda lambda). Proyecto educativo de Teoría de Control.
 
 ## Tabla de Contenidos
-- [Inicio Rápido (Windows)](#inicio-rápido-windows)
 - [Requisitos Previos](#requisitos-previos)
 - [Instalación](#instalación)
 - [Cómo Ejecutar el Programa](#cómo-ejecutar-el-programa)
@@ -38,54 +37,9 @@ Antes de ejecutar el programa, necesitas tener instalado:
 
 Descarga el archivo ZIP y descomprímelo en una carpeta.
 
-### Paso 2: Crear un Entorno Virtual (Recomendado)
+### Paso 2: Instalar Dependencias
 
-Es recomendable usar un entorno virtual para mantener las dependencias organizadas.
-
-#### Primero, crea el entorno virtual:
-
-**En Windows (CMD, PowerShell o Git Bash):**
-```cmd
-python -m venv .venv
-```
-
-**En Linux/Mac:**
-```bash
-python3 -m venv .venv
-```
-
-#### Luego, activa el entorno virtual:
-
-**En Windows - CMD (Símbolo del sistema):**
-```cmd
-.venv\Scripts\activate.bat
-```
-
-**En Windows - PowerShell:**
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
-**Nota para PowerShell:** Si recibes un error sobre políticas de ejecución, ejecuta primero:
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-**En Windows - Git Bash:**
-```bash
-source .venv/Scripts/activate
-```
-
-**En Linux/Mac:**
-```bash
-source .venv/bin/activate
-```
-
-Verás que tu terminal ahora muestra `(.venv)` al inicio de la línea, indicando que el entorno está activo.
-
-### Paso 3: Instalar Dependencias
-
-Con el entorno virtual activado, ejecuta el siguiente comando para instalar todas las bibliotecas necesarias:
+Ejecuta el siguiente comando para instalar todas las bibliotecas necesarias:
 
 **En Windows (CMD, PowerShell o Git Bash) y Linux/Mac:**
 ```
@@ -94,19 +48,10 @@ pip install -r requirements.txt
 
 **Nota sobre tkinter:**
 - **Windows:** `tkinter` viene incluido con la instalación estándar de Python. Si recibes un error, reinstala Python asegurándote de marcar "tcl/tk and IDLE" durante la instalación.
-- **Linux (Ubuntu/Debian):**
-  ```bash
-  sudo apt-get install python3-tk
-  ```
-- **Linux (Fedora):**
-  ```bash
-  sudo dnf install python3-tkinter
-  ```
-- **Mac:** `tkinter` viene incluido con la instalación estándar de Python.
 
 ## Cómo Ejecutar el Programa
 
-Una vez instaladas las dependencias y con el entorno virtual activado, ejecuta:
+Una vez instaladas las dependencias, ejecuta:
 
 **En Windows (CMD, PowerShell o Git Bash) y Linux/Mac:**
 ```
@@ -115,7 +60,7 @@ python app.py
 
 Se abrirá una ventana con la interfaz gráfica del simulador.
 
-**Importante:** Cada vez que cierres la terminal y quieras ejecutar el programa nuevamente, deberás activar el entorno virtual antes de ejecutar `python app.py`.
+
 
 ## Uso del Simulador
 
@@ -181,63 +126,6 @@ tpTeioriaDeControl/
 ├── README.md                                 # Este archivo
 └── .venv/                                    # Entorno virtual (si lo creaste)
 ```
-
-## Solución de Problemas
-
-### Error al activar el entorno virtual en PowerShell
-Si recibes el error: `"no se puede cargar el archivo... porque la ejecución de scripts está deshabilitada"`:
-
-**Solución:**
-1. Abre PowerShell como Administrador
-2. Ejecuta:
-   ```powershell
-   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-   ```
-3. Confirma con "S" (Sí)
-4. Cierra PowerShell y vuelve a intentar activar el entorno virtual
-
-### Error: "No module named 'tkinter'"
-- **Windows:** Reinstala Python desde python.org asegurándote de marcar "tcl/tk and IDLE" durante la instalación
-- **Linux:** Instala `python3-tk` con tu gestor de paquetes:
-  - Ubuntu/Debian: `sudo apt-get install python3-tk`
-  - Fedora: `sudo dnf install python3-tkinter`
-
-### Error: "No module named 'numpy'" o "No module named 'matplotlib'"
-Este error generalmente ocurre porque:
-1. El entorno virtual no está activado (verifica que veas `(.venv)` en tu terminal)
-2. Las dependencias no se instalaron correctamente
-
-**Solución:**
-- Activa el entorno virtual según tu terminal (ver Paso 2)
-- Ejecuta: `pip install -r requirements.txt`
-- Si persiste el error, intenta: `pip install --upgrade pip` y luego vuelve a instalar las dependencias
-
-### Error: "python: command not found" (Windows)
-**Solución:**
-1. Reinstala Python desde https://www.python.org/downloads/
-2. Durante la instalación, asegúrate de marcar "Add Python to PATH"
-3. Reinicia tu terminal después de la instalación
-
-### La ventana no se abre o se cierra inmediatamente
-- Verifica que tienes Python 3.8 o superior:
-  ```
-  python --version
-  ```
-- Asegúrate de que el entorno virtual esté activado (debe aparecer `(.venv)` en la terminal)
-- Revisa los logs de error en la consola para ver mensajes específicos
-
-### Los gráficos no se actualizan
-- Asegúrate de tener matplotlib instalado correctamente
-- Prueba reinstalando:
-  - Windows: `pip uninstall matplotlib` seguido de `pip install matplotlib`
-  - Linux/Mac: `pip uninstall matplotlib && pip install matplotlib`
-
-### No puedo ver el archivo app.py
-- Asegúrate de estar en la carpeta correcta del proyecto
-- En la terminal, ejecuta:
-  - Windows CMD/PowerShell: `dir`
-  - Git Bash/Linux/Mac: `ls`
-- Deberías ver `app.py` en la lista de archivos
 
 ## Autores
 
