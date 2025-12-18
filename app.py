@@ -359,7 +359,7 @@ class SondaLambdaGUI:
         self.axes[6].fill_between(x, 0.4, 0.6, color='green', alpha=0.15, label='Banda óptima')
         self.axes[6].set_ylabel("%O2", fontweight='bold')
         self.axes[6].set_xlabel("Tiempo (s)", fontweight='bold', fontsize=11)
-        self.axes[6].set_ylim(0.0, 2.0)
+        self.axes[6].set_ylim(0.3, 0.8)
         self.axes[6].legend(loc='upper right', fontsize=9)
 
         self.fig.tight_layout()
