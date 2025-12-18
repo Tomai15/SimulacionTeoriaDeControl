@@ -205,7 +205,7 @@ class SondaLambdaGUI:
         button_font = ("Arial", 12, "bold")
 
         # === PANEL DE CONTROL ===
-        control_frame = tk.LabelFrame(root, text="Configuración de Perturbación", font=("Arial", 12, "bold"), pady=15, padx=15)
+        control_frame = tk.LabelFrame(root, text="Configuración de Perturbación y Controlador", font=("Arial", 12, "bold"), pady=15, padx=15)
         control_frame.pack(pady=10, padx=10, fill=tk.X)
 
         # Fila única con los parámetros de perturbación
@@ -224,6 +224,22 @@ class SondaLambdaGUI:
         self.duracion_entry.grid(row=0, column=5, padx=10, pady=5)
         self.duracion_entry.insert(0, "5.0")
 
+        # Parámetros del Controlador PI (a la derecha)
+        tk.Label(control_frame, text="Kp:", font=label_font).grid(row=0, column=6, sticky=tk.W, padx=10, pady=5)
+        self.kp_entry = tk.Entry(control_frame, font=entry_font, width=10)
+        self.kp_entry.grid(row=0, column=7, padx=10, pady=5)
+        self.kp_entry.insert(0, "3.0")
+
+        tk.Label(control_frame, text="Ki:", font=label_font).grid(row=0, column=8, sticky=tk.W, padx=10, pady=5)
+        self.ki_entry = tk.Entry(control_frame, font=entry_font, width=10)
+        self.ki_entry.grid(row=0, column=9, padx=10, pady=5)
+        self.ki_entry.insert(0, "6.0")
+
+        tk.Label(control_frame, text="Setpoint (V):", font=label_font).grid(row=0, column=10, sticky=tk.W, padx=10, pady=5)
+        self.setpoint_entry = tk.Entry(control_frame, font=entry_font, width=10)
+        self.setpoint_entry.grid(row=0, column=11, padx=10, pady=5)
+        self.setpoint_entry.insert(0, "0.45")
+
         # Botones de control
         apply_button = tk.Button(control_frame, text="Aplicar Perturbación", command=self.apply_parameters,
                                 font=button_font, bg="#4CAF50", fg="white", padx=25)
@@ -232,6 +248,10 @@ class SondaLambdaGUI:
         self.pause_button = tk.Button(control_frame, text="⏸ Pausar Simulación", command=self.toggle_pause,
                                      font=button_font, bg="#2196F3", fg="white", padx=25)
         self.pause_button.grid(row=1, column=3, columnspan=3, pady=15, padx=5)
+
+        apply_controller_button = tk.Button(control_frame, text="Aplicar Controlador", command=self.apply_controller_parameters,
+                                           font=button_font, bg="#9C27B0", fg="white", padx=25)
+        apply_controller_button.grid(row=1, column=6, columnspan=6, pady=15, padx=5)
 
         # === INDICADOR DE ESTADO ===
         self.estado_frame = tk.Frame(root, bg="#333333", pady=5)
@@ -265,6 +285,29 @@ class SondaLambdaGUI:
                     f"Inicio={self.sim.perturbacion_inicio}s, Duración={self.sim.perturbacion_duracion}s <<<")
         except ValueError:
             self.log("ERROR: Parámetros inválidos. Verifique los valores ingresados.")
+
+    def apply_controller_parameters(self):
+        try:
+            new_kp = float(self.kp_entry.get())
+            new_ki = float(self.ki_entry.get())
+            new_setpoint = float(self.setpoint_entry.get())
+
+            # Validar rangos razonables
+            if new_kp < 0 or new_ki < 0:
+                self.log("ERROR: Kp y Ki deben ser valores positivos.")
+                return
+            if new_setpoint < 0.0 or new_setpoint > 1.0:
+                self.log("ERROR: El setpoint debe estar entre 0.0V y 1.0V.")
+                return
+
+            # Aplicar cambios
+            self.sim.Kp = new_kp
+            self.sim.Ki = new_ki
+            self.sim.setpoint_v = new_setpoint
+
+            self.log(f">>> Parámetros del Controlador actualizados: Kp={new_kp}, Ki={new_ki}, Setpoint={new_setpoint}V <<<")
+        except ValueError:
+            self.log("ERROR: Parámetros del controlador inválidos. Verifique los valores ingresados.")
 
     def toggle_pause(self):
         self.paused = not self.paused
