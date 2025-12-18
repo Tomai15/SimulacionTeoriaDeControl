@@ -198,6 +198,7 @@ class SondaLambdaGUI:
         self.root.title("TP Teoría de Control - Sistema de Inyección Electrónica con Sonda Lambda")
         self.sim = SondaLambdaSimulator()
         self.sim.logger = self.log
+        self.paused = False  # Estado de pausa
 
         label_font = ("Arial", 11)
         entry_font = ("Arial", 11)
@@ -223,10 +224,14 @@ class SondaLambdaGUI:
         self.duracion_entry.grid(row=0, column=5, padx=10, pady=5)
         self.duracion_entry.insert(0, "5.0")
 
-        # Botón de aplicar
+        # Botones de control
         apply_button = tk.Button(control_frame, text="Aplicar Perturbación", command=self.apply_parameters,
                                 font=button_font, bg="#4CAF50", fg="white", padx=25)
-        apply_button.grid(row=1, column=0, columnspan=6, pady=15)
+        apply_button.grid(row=1, column=0, columnspan=3, pady=15, padx=5)
+
+        self.pause_button = tk.Button(control_frame, text="⏸ Pausar Simulación", command=self.toggle_pause,
+                                     font=button_font, bg="#2196F3", fg="white", padx=25)
+        self.pause_button.grid(row=1, column=3, columnspan=3, pady=15, padx=5)
 
         # === INDICADOR DE ESTADO ===
         self.estado_frame = tk.Frame(root, bg="#333333", pady=5)
@@ -261,6 +266,15 @@ class SondaLambdaGUI:
         except ValueError:
             self.log("ERROR: Parámetros inválidos. Verifique los valores ingresados.")
 
+    def toggle_pause(self):
+        self.paused = not self.paused
+        if self.paused:
+            self.pause_button.config(text="▶ Reanudar Simulación", bg="#FF9800")
+            self.log(">>> Simulación PAUSADA <<<")
+        else:
+            self.pause_button.config(text="⏸ Pausar Simulación", bg="#2196F3")
+            self.log(">>> Simulación REANUDADA <<<")
+
     def log(self, message):
         self.log_text.configure(state='normal')
         self.log_text.insert(tk.END, message + "\n")
@@ -268,7 +282,9 @@ class SondaLambdaGUI:
         self.log_text.configure(state='disabled')
 
     def update_plot(self, i):
-        self.sim.step()
+        # Solo avanzar la simulación si no está pausada
+        if not self.paused:
+            self.sim.step()
 
         # Actualizar indicador de estado
         if len(self.sim.voltaje_sonda_history) > 0:
